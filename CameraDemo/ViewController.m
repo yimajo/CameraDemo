@@ -62,7 +62,10 @@ static const CGFloat focusLayerSize = 50.0;
     self.focusLayer = [[CALayer alloc] init];
     self.focusLayer.borderColor = [[UIColor whiteColor] CGColor];
     self.focusLayer.borderWidth = 1.0;
-    self.focusLayer.frame = CGRectMake(0, 0, focusLayerSize, focusLayerSize);
+    self.focusLayer.frame = CGRectMake(self.captureImageView.center.x,
+                                       self.captureImageView.center.y,
+                                       focusLayerSize,
+                                       focusLayerSize);
     self.focusLayer.hidden = YES;
     [self.captureImageView.layer addSublayer:self.focusLayer];
 }
@@ -196,10 +199,8 @@ static const CGFloat focusLayerSize = 50.0;
 
 - (void)didTapGesture:(UITapGestureRecognizer *)gestureRecognizer
 {
-    self.focusLayer.hidden = NO;
-
     CGPoint p = [gestureRecognizer locationInView:gestureRecognizer.view];
-
+    
     [self setFocusPoint:p];
     
 }
@@ -222,6 +223,8 @@ static const CGFloat focusLayerSize = 50.0;
                                        focusLayerSize,
                                        focusLayerSize);
     
+    self.focusLayer.hidden = NO;
+
     //pointOfInterestへの代入には座標系に応じて値を変換してやる必要がある
     //{0,0}の座標が縦持ちにして右上になり下がx、左がyとなる（x,yがそれぞれテレコ、かつyが逆）
     //それぞれを[0,1]に正規化する
