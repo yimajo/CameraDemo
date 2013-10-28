@@ -196,11 +196,11 @@
                                        INDICATOR_RECT_SIZE,
                                        INDICATOR_RECT_SIZE);
     
-    //[0,1]に正規化する
-    CGFloat x = point.x / self.captureImageView.bounds.size.width;
-    CGFloat y = point.y / self.captureImageView.bounds.size.height;
-    
-    CGPoint pointOfInterest = CGPointMake(x, y);
+    //pointOfInterestへの代入には座標系に応じて値を変換してやる必要がある
+    //{0,0}の座標が縦持ちにして右上になり下がx、左がyとなる（x,yがそれぞれテレコ、かつyが逆）
+    //それぞれを[0,1]に正規化する
+    CGPoint pointOfInterest = CGPointMake(point.y / self.captureImageView.bounds.size.height,
+                                          1.0 - point.x / self.captureImageView.bounds.size.width);
     
     AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
     
