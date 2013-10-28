@@ -31,11 +31,24 @@
     [self sessionInit];
     [self focusLayerInit];
 
-    UIGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self
-                                                                                     action:@selector(didTapGesture:)];
+    UITapGestureRecognizer *tapGestureRecognizer
+        = [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                  action:@selector(didTapGesture:)];
     
-    [self.captureImageView addGestureRecognizer:gestureRecognizer];
+    UISwipeGestureRecognizer *swipeLeftGestureRecognizer
+        = [[UISwipeGestureRecognizer alloc] initWithTarget:self
+                                                    action:@selector(swipeGesture:)];
+    swipeLeftGestureRecognizer.direction = UISwipeGestureRecognizerDirectionLeft;
+    
+    UISwipeGestureRecognizer *swipeRightGestureRecognizer
+        = [[UISwipeGestureRecognizer alloc] initWithTarget:self
+                                                action:@selector(swipeGesture:)];
 
+    swipeRightGestureRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
+
+    [self.captureImageView addGestureRecognizer:tapGestureRecognizer];
+    [self.captureImageView addGestureRecognizer:swipeLeftGestureRecognizer];
+    [self.captureImageView addGestureRecognizer:swipeRightGestureRecognizer];
 }
 
 - (void)didReceiveMemoryWarning
@@ -179,6 +192,8 @@
     
 }
 
+#pragma mark - gesture
+
 - (void)didTapGesture:(UITapGestureRecognizer *)gestureRecognizer
 {
     self.focusLayer.hidden = NO;
@@ -188,6 +203,17 @@
     [self setFocusPoint:p];
     
 }
+
+- (void)swipeGesture:(UISwipeGestureRecognizer *)gestureRecognizer
+{
+    if (gestureRecognizer.direction == UISwipeGestureRecognizerDirectionLeft) {
+        NSLog(@"left");
+    } else if (gestureRecognizer.direction == UISwipeGestureRecognizerDirectionRight) {
+        NSLog(@"right");
+    }
+}
+
+#pragma mark - 
 
 - (void)setFocusPoint:(CGPoint)point
 {
