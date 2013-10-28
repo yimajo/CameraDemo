@@ -125,47 +125,13 @@
     // プレビュー表示
     AVCaptureVideoPreviewLayer *previewLayer = [AVCaptureVideoPreviewLayer layerWithSession:self.captureSession];
     previewLayer.frame = self.captureImageView.bounds;
-//    previewLayer.automaticallyAdjustsMirroring = NO;
+
     previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
     [self.captureImageView.layer addSublayer:previewLayer];
     
-
-    
-//    AVCaptureConnection *videoConnection = NULL;
-//    
-//    // カメラの向きなどを設定する
-//    [self.captureSession beginConfiguration];
-//    
-//    for ( AVCaptureConnection *connection in [dataOutput connections] )
-//    {
-//        for ( AVCaptureInputPort *port in [connection inputPorts] )
-//        {
-//            if ( [[port mediaType] isEqual:AVMediaTypeVideo] )
-//            {
-//                videoConnection = connection;
-//                
-//            }
-//        }
-//    }
-//    if([videoConnection isVideoOrientationSupported]) // **Here it is, its always false**
-//    {
-//        [videoConnection setVideoOrientation:AVCaptureVideoOrientationPortrait];
-//    }
-//    
-//    [self.captureSession commitConfiguration];
-
     // セッションをスタートする
     [self.captureSession startRunning];
     
-}
-
-//delegateメソッド。各フレームにおける処理
-- (void)captureOutput:(AVCaptureOutput *)captureOutput
-didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
-       fromConnection:(AVCaptureConnection *)connection
-{
-    // 画像の表示
-//    self.captureImageView.image = [self imageFromSampleBufferRef:sampleBuffer];
 }
 
 // CMSampleBufferRefをUIImageへ
