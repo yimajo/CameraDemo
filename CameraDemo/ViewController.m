@@ -262,11 +262,11 @@ static const CGFloat focusLayerSize = 50.0;
 - (void)observeValueForKeyPath:(NSString *)keyPath
                       ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    if (!self.adjustingExposure) {
-        return;
-    }
-    
     if ([keyPath isEqual:@"adjustingExposure"]) {
+        if (!self.adjustingExposure) {
+            return;
+        }
+
         if ([[change objectForKey:NSKeyValueChangeNewKey] boolValue] == NO) {
             //NOのとき露出が変更中ではないので露出を固定させる
             self.adjustingExposure = NO;
