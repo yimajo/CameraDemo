@@ -19,6 +19,9 @@
 //タップされた際にYESにし、露出変更時にNOにする
 @property (nonatomic) BOOL adjustingExposure;
 
+//撮影中の映像をそのまま
+@property (strong, nonatomic) AVCaptureStillImageOutput *stillImageOutput;
+
 @end
 
 static const CGFloat focusLayerSize = 50.0;
@@ -122,17 +125,14 @@ static const CGFloat focusLayerSize = 50.0;
     AVCaptureInput *captureInput = [AVCaptureDeviceInput deviceInputWithDevice:device
                                                                          error:&error];
     
-    //ビデオデータ出力作成
-    NSDictionary *settings = @{(id)kCVPixelBufferPixelFormatTypeKey:[NSNumber numberWithInt:kCVPixelFormatType_32BGRA]};
-    
-    AVCaptureVideoDataOutput *dataOutput = [[AVCaptureVideoDataOutput alloc] init];
-    dataOutput.videoSettings = settings;
-    [dataOutput setSampleBufferDelegate:self queue:dispatch_get_main_queue()];
-
     //セッション生成。inputとoutputを指定
+    //input
     self.captureSession = [[AVCaptureSession alloc] init];
     [self.captureSession addInput:captureInput];
-    [self.captureSession addOutput:dataOutput];
+
+    //output
+    self.stillImageOutput = [[AVCaptureStillImageOutput alloc] init];
+    [self.captureSession addOutput:self.stillImageOutput];
     
     //TODO: Photoじゃないとどうなるのか
     self.captureSession.sessionPreset = AVCaptureSessionPresetPhoto;
@@ -190,9 +190,26 @@ static const CGFloat focusLayerSize = 50.0;
     return image;
 }
 
-- (IBAction)shutterCamera:(id)sender
+- (IBAction)takePhoto:(id)sender
 {
+    AVCaptureConnection *videoConnection = [self.stillImageOutput connectionWithMediaType:AVMediaTypeVideo];
     
+    if (!videoConnection) {
+        return;
+    }
+    
+    [self.stillImageOutput captureStillImageAsynchronouslyFromConnection:videoConnection
+                                                       completionHandler:^(CMSampleBufferRef imageDataSampleBuffer, NSError *error)
+    {
+        if (!imageDataSampleBuffer) {
+            return ;
+        }
+        NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
+        
+        UIImage *image = [[UIImage alloc] initWithData:imageData];
+        
+        UIImageWriteToSavedPhotosAlbum(image, self, nil, nil);
+    }];
 }
 
 #pragma mark - gesture
