@@ -134,9 +134,8 @@ static const CGFloat focusLayerSize = 50.0;
     self.stillImageOutput = [[AVCaptureStillImageOutput alloc] init];
     [self.captureSession addOutput:self.stillImageOutput];
     
-    //TODO: Photoじゃないとどうなるのか
+    //解像度を指定。Photoは端末に応じた最高の解像度になる
     self.captureSession.sessionPreset = AVCaptureSessionPresetPhoto;
-    //beginConfigurationとcommitConfigurationとはなにか
 
     // プレビュー表示
     AVCaptureVideoPreviewLayer *previewLayer = [AVCaptureVideoPreviewLayer layerWithSession:self.captureSession];
