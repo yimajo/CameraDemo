@@ -21,7 +21,7 @@
 
 @end
 
-#define INDICATOR_RECT_SIZE 50.0
+static const CGFloat focusLayerSize = 50.0;
 
 @implementation ViewController
 
@@ -62,7 +62,7 @@
     self.focusLayer = [[CALayer alloc] init];
     self.focusLayer.borderColor = [[UIColor whiteColor] CGColor];
     self.focusLayer.borderWidth = 1.0;
-    self.focusLayer.frame = CGRectMake(0, 0, INDICATOR_RECT_SIZE, INDICATOR_RECT_SIZE);
+    self.focusLayer.frame = CGRectMake(0, 0, focusLayerSize, focusLayerSize);
     self.focusLayer.hidden = YES;
     [self.captureImageView.layer addSublayer:self.focusLayer];
 }
@@ -217,10 +217,10 @@
 
 - (void)setFocusPoint:(CGPoint)point
 {
-    self.focusLayer.frame = CGRectMake(point.x - INDICATOR_RECT_SIZE / 2.0,
-                                       point.y - INDICATOR_RECT_SIZE / 2.0,
-                                       INDICATOR_RECT_SIZE,
-                                       INDICATOR_RECT_SIZE);
+    self.focusLayer.frame = CGRectMake(point.x - focusLayerSize / 2.0,
+                                       point.y - focusLayerSize / 2.0,
+                                       focusLayerSize,
+                                       focusLayerSize);
     
     //pointOfInterestへの代入には座標系に応じて値を変換してやる必要がある
     //{0,0}の座標が縦持ちにして右上になり下がx、左がyとなる（x,yがそれぞれテレコ、かつyが逆）
